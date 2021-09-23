@@ -12,7 +12,7 @@ const searchFormHTML = `
    </label>`;
 document.querySelector('.header').insertAdjacentHTML('beforeend', searchFormHTML);
 
-//create and insert new div used to display a 'no results' message to the user if their search yields no results
+// create and insert new div used to display a 'no search results' message
 const noResults = document.createElement('div');
 noResults.className = 'no-results';
 document.querySelector('.page').append(noResults);
@@ -22,8 +22,6 @@ const studentList = document.querySelector('.student-list');
 const linkList = document.querySelector('.link-list');
 const searchInput = document.querySelector('#search');
 const searchBtn = document.querySelector('.student-search button');
-
-
 
 /**
  * creates and inserts elements needed to display a "page" of nine students
@@ -35,7 +33,7 @@ const showPage = (list, page) => {
    // set variables to create a range of nine indexes corresponding to the students to be shown on the page being generated
    const startIndex = (page * 9) - 9;
    const endIndex = page * 9;
-   //Clear any students from student-list
+   //clear out student-list ul element
    studentList.innerHTML = '';
    // generate HTML for the list items and insert them into the page
    for (let i = 0; i < list.length; i++) {
@@ -95,19 +93,18 @@ const addPagination = list => {
 const filterResults = () => {
    let newList = [];
    const searchTerm = searchInput.value.toUpperCase();
-   // add students with names matching search input to the newList array
+   // add students from the data array with names matching search input to the newList array
    for (let i = 0; i < data.length; i++) {
       const name = (data[i].name.first + ' ' + data[i].name.last).toUpperCase();
       if (name.includes(searchTerm)) {
          newList.push(data[i]);
       }
    }
-   // clear any text out of the no-results block that may exist from previous search
+   // clear any text out of the no-results block that may exist from a previous search
    noResults.innerHTML = '';
-   // if search returns no result, inform the user - otherwise, display filtered results
+   // if search returns no result, display only the 'no results' message - otherwise, display filtered results
    if (newList.length < 1) {
-      const noResultsMsg = `<p>Sorry, your search did not match any results.</p>`;
-      noResults.insertAdjacentHTML('beforeend', noResultsMsg);
+      noResults.textContent = 'Sorry, your search did not match any results.';
       studentList.innerHTML = '';
       linkList.innerHTML = '';
    } else {
